@@ -195,4 +195,6 @@ This confirms that docker is working.
 
 **Phase 0 complete.** Noted OS deviation: running Debian 13 (Trixie)  with ssh hardened and firewall + docker setup correctly.
 
-Next phase: [Phase1](Phase1).
+---
+
+> Next phase: [Phase1](Phase1).

@@ -60,4 +60,6 @@ ssh <username>@<server-tailscale-ip>
 
 **Phase 1 complete:** all three devices connected, server reachable via `ssh <username>@<tailscale-ip>` confirmed from an external network.
 
-Next phase: [Phase2](Phase2).
+---
+
+> Next phase: [Phase2](Phase2).

@@ -22,8 +22,7 @@ Turn the HP box into a self-hosted home server: media, Minecraft, LAN file shari
 | Tailscale | Remote access gate for everything but Cowrie | Yes |
 | Portainer | Container management | Yes (Tailscale-only) |
 | Cockpit | Host management (reboot, updates, system graphs) | Yes (Tailscale-only) |
-| Jellyfin | Media streaming | Toggle, conflicts with Minecraft |
-| Minecraft | Game server | Toggle, conflicts with Jellyfin |
+| Jellyfin | Media streaming | Toggle |
 | Samba | LAN/remote file sharing | As needed |
 | FileBrowser | Web UI over Samba | As needed |
 | Cowrie | SSH/Telnet honeypot | Toggle |
@@ -41,12 +40,12 @@ Remote devices connect via Tailscale (no port forwarding) to reach Portainer, Co
 - **CrowdSec does not watch Cowrie** (auto-banning honeypot traffic would defeat its purpose), only real services (SSH, Samba, Portainer/Cockpit).
 - **Portainer** handles containers day-to-day; **Cockpit** handles host-level actions (reboot/shutdown need real auth and a confirm step).
 - **Samba** with separate read-only (media) and read-write (docs/backups) shares, real accounts, no open guest share. **FileBrowser** adds a lighter UI on top instead of Nextcloud.
-- **ML job**: DBSCAN over session duration, command count, command sequence (TF-IDF/n-grams), credentials tried, and optionally IP geo/ASN. Cross-references outlier IPs against CrowdSec's blocklist. Runs locally, batch only, never alongside Minecraft.
+- **ML job**: DBSCAN over session duration, command count, command sequence (TF-IDF/n-grams), credentials tried, and optionally IP geo/ASN. Cross-references outlier IPs against CrowdSec's blocklist. Runs locally, batch only, never alongside
 
 ## Build order
 
 1. Tailscale, confirm remote access from outside the home network
-2. Jellyfin, Minecraft, Samba, FileBrowser, confirm LAN + Tailscale access
+2. Jellyfin, Samba, FileBrowser, confirm LAN + Tailscale access
 3. Portainer + Cockpit, confirm Tailscale-only and auth/confirm steps
 4. Cowrie + CrowdSec, deploy isolated, let run a few weeks to collect data
 5. Review real logs
@@ -60,4 +59,3 @@ Remote devices connect via Tailscale (no port forwarding) to reach Portainer, Co
 - SSH key-only auth, no root login, automatic security updates, default-deny firewall
 - Log rotation with a retention window (e.g. 30 days), revisit once real volume is visible
 - Cockpit reboot/shutdown requires real auth + confirm step
-- Minecraft stays Tailscale-only unless exposing it externally is a deliberate later decision
