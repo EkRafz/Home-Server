@@ -13,14 +13,14 @@
 
 ## Goal
 
-Turn the HP box into a self-hosted home server: media, Minecraft, LAN file sharing, secure remote access (no port forwarding except one deliberate exception), phone-manageable, plus a honeypot/active-defense setup with periodic ML log analysis.
+Turn the HP box into a self-hosted home server: media, LAN file sharing, secure remote access (no port forwarding except one deliberate exception), phone-manageable, plus a honeypot/active-defense setup with periodic ML log analysis.
 
 ## Services (Docker, 8GB RAM shared)
 
 | Service | Purpose | Always on? |
 |---|---|---|
 | Tailscale | Remote access gate for everything but Cowrie | Yes |
-| Portainer | Container management | Yes (Tailscale-only) |
+| Portainer (deleted) | Container management | Yes (Tailscale-only) |
 | Cockpit | Host management (reboot, updates, system graphs) | Yes (Tailscale-only) |
 | Jellyfin | Media streaming | Toggle |
 | Samba | LAN/remote file sharing | As needed |
@@ -38,7 +38,7 @@ Remote devices connect via Tailscale (no port forwarding) to reach Portainer, Co
 - **Tailscale** is the only access path except Cowrie. No router forwarding for any other service.
 - **Cowrie takes port 22** (real SSH moved elsewhere) to catch the bulk of scanner traffic. It's fully isolated: own Docker network, no shared volumes, firewall rules blocking it from reaching anything else, since it's the one thing facing the open internet.
 - **CrowdSec does not watch Cowrie** (auto-banning honeypot traffic would defeat its purpose), only real services (SSH, Samba, Portainer/Cockpit).
-- **Portainer** handles containers day-to-day; **Cockpit** handles host-level actions (reboot/shutdown need real auth and a confirm step).
+- **Portainer** deleted and decided that it wasn't worth it; **Cockpit** handles host-level actions (reboot/shutdown need real auth and a confirm step).
 - **Samba** with separate read-only (media) and read-write (docs/backups) shares, real accounts, no open guest share. **FileBrowser** adds a lighter UI on top instead of Nextcloud.
 - **ML job**: DBSCAN over session duration, command count, command sequence (TF-IDF/n-grams), credentials tried, and optionally IP geo/ASN. Cross-references outlier IPs against CrowdSec's blocklist. Runs locally, batch only, never alongside
 
@@ -46,7 +46,7 @@ Remote devices connect via Tailscale (no port forwarding) to reach Portainer, Co
 
 1. Tailscale, confirm remote access from outside the home network
 2. Jellyfin, Samba, FileBrowser, confirm LAN + Tailscale access
-3. Portainer + Cockpit, confirm Tailscale-only and auth/confirm steps
+3. Portainer (deleted) + Cockpit, confirm Tailscale-only and auth/confirm steps
 4. Cowrie + CrowdSec, deploy isolated, let run a few weeks to collect data
 5. Review real logs
 6. ML container, build and toggle against real data
